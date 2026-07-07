@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SafeZone Smart — Em breve</title>
+<meta name="description" content="SafeZone Smart: segurança eletrônica, redes de computadores, casa inteligente e motores PPA em Leme e região. Novo site em construção.">
+<link rel="icon" href="assets/logo-completo.png" type="image/png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@500;600;700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#0A101C;
+  --bg-2:#0d1420;
+  --line:rgba(255,255,255,0.08);
+  --line-dark:rgba(255,255,255,0.1);
+  --green-500:#2FA83C;
+  --green-neon:#4CFF5E;
+  --ink-400:rgba(255,255,255,0.55);
+  --ease:cubic-bezier(.16,1,.3,1);
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+html,body{height:100%;}
+body{
+  background:var(--bg);
+  color:#fff;
+  font-family:'Inter',sans-serif;
+  height:100vh;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  overflow:hidden;
+  position:relative;
+  padding:min(1.5vh,14px) 24px;
+}
+@media (prefers-reduced-motion: reduce){
+  *{animation-duration:.001ms !important;animation-iteration-count:1 !important;}
+}
+
+/* fundo: grid de pontos + glow radial + varredura sutil */
+.bg-grid{
+  position:fixed;inset:0;z-index:0;pointer-events:none;
+  background-image:radial-gradient(circle at 1px 1px, rgba(255,255,255,0.06) 1px, transparent 1px);
+  background-size:28px 28px;
+  mask-image:radial-gradient(ellipse 80% 80% at 50% 40%, black 30%, transparent 85%);
+}
+.bg-glow{
+  position:fixed;inset:0;z-index:0;pointer-events:none;
+  background:radial-gradient(ellipse 60% 50% at 50% 38%, rgba(76,255,94,0.10), transparent 70%);
+}
+
+.wrap{position:relative;z-index:2;display:flex;flex-direction:column;align-items:center;text-align:center;max-width:640px;}
+
+.eyebrow{
+  font-family:'JetBrains Mono',monospace;font-size:12px;letter-spacing:.16em;text-transform:uppercase;
+  color:var(--green-neon);display:inline-flex;align-items:center;gap:9px;font-weight:600;margin-bottom:8px;
+}
+.eyebrow::before, .eyebrow::after{content:'';width:20px;height:1px;background:rgba(76,255,94,0.4);}
+
+/* ---- composição do logo animado (imagem única + linhas atrás) ---- */
+.hero-visual-col{display:flex;flex-direction:column;align-items:center;margin:2px 0 0;}
+.hero-visual{
+  position:relative;
+  height:min(36vh,380px);
+  width:auto;
+  aspect-ratio:2325/1923;
+}
+.hero-glow{
+  position:absolute;
+  left:50.5%;top:40.2%;
+  transform:translate(-50%,-50%);
+  width:58%;aspect-ratio:1;border-radius:50%;
+  background:radial-gradient(circle, rgba(76,255,94,0.28) 0%, rgba(76,255,94,0.08) 55%, rgba(76,255,94,0) 75%);
+  z-index:0;
+  animation:breathe 4.5s ease-in-out infinite;
+  filter:blur(6px);
+}
+@keyframes breathe{
+  0%,100%{opacity:.75;}
+  50%{opacity:1;}
+}
+.hero-visual svg{position:absolute;inset:0;width:100%;height:100%;z-index:1;}
+.hero-logo-img{position:relative;z-index:2;width:100%;height:100%;object-fit:contain;display:block;}
+
+h1{
+  font-family:'Oswald',sans-serif;font-weight:700;text-transform:uppercase;
+  font-size:clamp(20px,3.6vh,32px);line-height:1.15;letter-spacing:.01em;margin-top:24px;
+}
+h1 .accent{color:var(--green-neon);text-shadow:0 0 26px rgba(76,255,94,0.4);}
+
+p.lead{color:var(--ink-400);font-size:clamp(12.5px,1.6vh,15px);line-height:1.5;margin-top:6px;max-width:440px;}
+
+/* terminal de status */
+.terminal{
+  font-family:'JetBrains Mono',monospace;font-size:12.5px;color:var(--green-neon);
+  margin-top:12px;min-height:18px;display:flex;align-items:center;gap:2px;
+}
+.terminal .cursor{
+  display:inline-block;width:8px;height:14px;background:var(--green-neon);margin-left:2px;
+  animation:blink 1s step-end infinite;
+}
+@keyframes blink{50%{opacity:0;}}
+
+.progress-track{
+  width:240px;height:3px;background:rgba(255,255,255,0.08);border-radius:3px;overflow:hidden;margin-top:9px;
+}
+.progress-fill{
+  height:100%;width:30%;border-radius:3px;
+  background:linear-gradient(90deg, var(--green-500), var(--green-neon));
+  animation:loading 2.4s ease-in-out infinite;
+}
+@keyframes loading{
+  0%{transform:translateX(-100%);}
+  100%{transform:translateX(400%);}
+}
+
+.ctas{display:flex;gap:14px;flex-wrap:wrap;justify-content:center;margin-top:14px;}
+.btn{
+  display:inline-flex;align-items:center;gap:9px;
+  font-family:'Inter',sans-serif;font-weight:600;font-size:13.5px;
+  padding:11px 22px;border-radius:999px;text-decoration:none;color:#fff;
+  transition:transform .18s var(--ease), box-shadow .18s var(--ease), background .18s var(--ease);
+}
+.btn svg{width:16px;height:16px;flex-shrink:0;}
+.btn-wa{background:#25D366;color:#fff;}
+.btn-wa:hover{transform:translateY(-2px);box-shadow:0 10px 26px -8px rgba(37,211,102,.55);}
+.btn-ghost{border:1.5px solid var(--line-dark);color:#fff;}
+.btn-ghost:hover{border-color:var(--green-neon);color:var(--green-neon);transform:translateY(-2px);}
+
+.segments-tag{
+  font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.08em;color:var(--ink-400);
+  margin-top:13px;text-transform:uppercase;
+}
+.segments-tag b{color:var(--green-neon);font-weight:600;}
+
+footer{position:relative;z-index:2;margin-top:11px;font-family:'JetBrains Mono',monospace;font-size:11px;color:rgba(255,255,255,0.32);}
+</style>
+</head>
+<body>
+
+<div class="bg-grid"></div>
+<div class="bg-glow"></div>
+
+<div class="wrap">
+  <span class="eyebrow">Novo site em construção</span>
+
+  <div class="hero-visual-col">
+    <div class="hero-visual" id="heroVisual" aria-hidden="true">
+      <div class="hero-glow"></div>
+
+      <svg viewBox="0 0 2325 1923" preserveAspectRatio="xMidYMid meet">
+        <g stroke="#3FAE2A" stroke-width="7" fill="none" opacity="0.9">
+          <path d="M390,215 H874"/>
+          <path d="M294,559 H721"/>
+          <path d="M300,866 H728"/>
+          <path d="M1997,203 H1424"/>
+          <path d="M1974,568 H1385"/>
+          <path d="M1985,894 H1576"/>
+        </g>
+        <g fill="#4CFF5E">
+          <circle r="11"><animateMotion dur="1.6s" repeatCount="indefinite" path="M390,215 H874"/></circle>
+          <circle r="11"><animateMotion dur="1.4s" repeatCount="indefinite" path="M294,559 H721"/></circle>
+          <circle r="11"><animateMotion dur="1.5s" repeatCount="indefinite" path="M300,866 H728"/></circle>
+          <circle r="11"><animateMotion dur="1.7s" repeatCount="indefinite" path="M1997,203 H1424"/></circle>
+          <circle r="11"><animateMotion dur="1.3s" repeatCount="indefinite" path="M1974,568 H1385"/></circle>
+          <circle r="11"><animateMotion dur="1.6s" repeatCount="indefinite" path="M1985,894 H1576"/></circle>
+        </g>
+        <g fill="#3FAE2A">
+          <circle cx="390" cy="215" r="10"/>
+          <circle cx="294" cy="559" r="10"/>
+          <circle cx="300" cy="866" r="10"/>
+          <circle cx="1997" cy="203" r="10"/>
+          <circle cx="1974" cy="568" r="10"/>
+          <circle cx="1985" cy="894" r="10"/>
+        </g>
+      </svg>
+
+      <img src="assets/logo-completo.png" alt="SafeZone Smart — Conexões Inteligentes" class="hero-logo-img">
+    </div>
+  </div>
+
+  <h1>Estamos construindo<br>algo <span class="accent">novo</span>.</h1>
+  <p class="lead">Nosso site está sendo atualizado para ficar do tamanho da nossa operação. Enquanto isso, fale com a gente direto pelo WhatsApp — o atendimento não para.</p>
+
+  <div class="terminal" id="terminal"><span id="terminalText"></span><span class="cursor"></span></div>
+  <div class="progress-track"><div class="progress-fill"></div></div>
+
+  <div class="ctas">
+    <a class="btn btn-wa" href="https://wa.me/5519996869707?text=Ol%C3%A1!%20Vi%20o%20site%20em%20constru%C3%A7%C3%A3o%20e%20gostaria%20de%20falar%20com%20a%20SafeZone%20Smart." target="_blank" rel="noopener">
+      <svg viewBox="0 0 24 24" fill="currentColor"><path d="M17.6 6.32A7.85 7.85 0 0 0 12.05 4a7.94 7.94 0 0 0-6.9 11.9L4 20l4.2-1.1a7.9 7.9 0 0 0 3.85 1h0a7.94 7.94 0 0 0 5.55-13.58Z"/></svg>
+      Falar no WhatsApp
+    </a>
+    <a class="btn btn-ghost" href="https://instagram.com/safezone.equipamentos" target="_blank" rel="noopener">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="3" width="18" height="18" rx="4"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1"/></svg>
+      @safezone.equipamentos
+    </a>
+  </div>
+
+  <div class="segments-tag"><b>Segurança</b> · <b>Redes</b> · <b>Casa Inteligente</b> · <b>PPA</b> — Leme/SP e região</div>
+</div>
+
+<footer>© 2023 SafeZone Smart — Conexões Inteligentes</footer>
+
+<script>
+// terminal com efeito de digitação, ciclando mensagens
+const linhas = [
+  '> inicializando sistema de segurança...',
+  '> conectando dispositivos à rede...',
+  '> carregando automação residencial...',
+  '> sincronizando com motores PPA...',
+  '> quase lá.'
+];
+const el = document.getElementById('terminalText');
+let li = 0, ci = 0, apagando = false;
+
+function tick(){
+  const atual = linhas[li];
+  if(!apagando){
+    ci++;
+    el.textContent = atual.slice(0, ci);
+    if(ci === atual.length){
+      apagando = true;
+      setTimeout(tick, 1400);
+      return;
+    }
+  } else {
+    ci--;
+    el.textContent = atual.slice(0, ci);
+    if(ci === 0){
+      apagando = false;
+      li = (li+1) % linhas.length;
+    }
+  }
+  setTimeout(tick, apagando ? 22 : 38);
+}
+tick();
+</script>
+</body>
+</html>

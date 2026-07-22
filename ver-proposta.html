@@ -22,16 +22,26 @@
   .servico-titulo{font-size:18px;font-weight:800;color:#2D3748;margin-bottom:2px}
   .sub{font-size:13px;color:#6b7280;margin-bottom:22px}
   table{width:100%;border-collapse:collapse;margin-bottom:14px}
-  th{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;color:#9ca3af;text-align:left;padding:0 0 8px;border-bottom:1px solid #e5e7eb}
+  thead th{background:#79B913;color:#fff;font-size:11px;font-weight:700;text-transform:none;letter-spacing:0;text-align:left;padding:8px 10px;border:none}
+  thead th:first-child{border-radius:6px 0 0 6px}
+  thead th:last-child{border-radius:0 6px 6px 0}
   th.num,td.num{text-align:right}
-  td{font-size:13px;color:#374151;padding:8px 0;border-bottom:1px solid #f3f4f6}
+  td{font-size:13px;color:#374151;padding:9px 10px;border-bottom:1px solid #f3f4f6}
   .obs{font-size:12.5px;color:#4b5563;line-height:1.6;background:#f9fafb;border:1px solid #e5e7eb;border-radius:10px;padding:14px 16px;margin-bottom:18px;white-space:pre-wrap}
-  .total-wrap{border-top:2px solid #e5e7eb;margin-top:6px;padding-top:14px;display:flex;justify-content:space-between;align-items:baseline}
-  .total-label{font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:#6b7280}
-  .total-val{font-size:28px;font-weight:900;color:#79B913}
+  .total-bar{background:#F0FDF4;border-radius:8px;padding:14px 16px;display:flex;justify-content:space-between;align-items:center;margin-bottom:18px}
+  .total-label{font-size:13px;font-weight:700;color:#1f2937}
+  .total-val{font-size:20px;font-weight:900;color:#79B913}
+  .cond-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:18px}
+  .cond-box{border:1px solid #e5e7eb;border-radius:12px;padding:12px 14px}
+  .cond-box-titulo{font-size:10px;font-weight:800;text-transform:uppercase;letter-spacing:.5px;color:#374151;margin-bottom:8px}
+  .cond-item{margin-bottom:8px}
+  .cond-item-label{font-size:12px;font-weight:600;color:#4b5563}
+  .cond-item-val{font-size:13px;font-weight:800;color:#1f2937;margin-top:1px}
+  .cond-obs-texto{font-size:11px;color:#6b7280;line-height:1.6;text-align:justify;white-space:pre-wrap}
   .rodape{font-size:11px;color:#9ca3af;text-align:center;margin-top:26px;line-height:1.6}
   .selo{font-size:10px;font-weight:700;color:#79B913;border:1px solid #C0DD97;background:#EAF3DE;padding:4px 10px;border-radius:20px}
   .erro{color:#dc2626;font-size:14px;text-transform:none;font-weight:700}
+  @media (max-width:480px){ .cond-grid{grid-template-columns:1fr} }
 </style>
 </head>
 <body>
@@ -87,12 +97,11 @@ function renderProposta(d){
   var linhasItens = itens.map(function(it){
     return '<tr><td>'+escHtml(it.nome||'')+'</td><td class="num">'+(it.qtd||1)+'</td><td class="num">R$ '+fmtValor(it.unit)+'</td><td class="num">R$ '+fmtValor((it.qtd||1)*(it.unit||0))+'</td></tr>';
   }).join('');
-  var tabelaItens = itens.length ? (
-    '<table><thead><tr><th>Item</th><th class="num">Qtd</th><th class="num">Unit.</th><th class="num">Total</th></tr></thead><tbody>'+linhasItens+'</tbody></table>'
+  var linhaServico = d.valorServicos ? '<tr><td colspan="3" style="font-weight:700;color:#1f2937">Serviços técnicos</td><td class="num" style="font-weight:700;color:#1f2937">R$ '+fmtValor(d.valorServicos)+'</td></tr>' : '';
+  var tabela = (itens.length||d.valorServicos) ? (
+    '<table><thead><tr><th>Descrição</th><th class="num">Qtd</th><th class="num">Valor</th><th class="num">Total</th></tr></thead><tbody>'+linhasItens+linhaServico+'</tbody></table>'
   ) : '';
-  var linhaServico = d.valorServicos ? (
-    '<table><tbody><tr><td>Serviços técnicos</td><td class="num" colspan="3">R$ '+fmtValor(d.valorServicos)+'</td></tr></tbody></table>'
-  ) : '';
+
   var capa = d.aberturaTitulo ? (
     '<div class="capa">'+
       '<div class="capa-eyebrow">Proposta comercial</div>'+
@@ -101,13 +110,32 @@ function renderProposta(d){
     '</div>'
   ) : '';
 
+  var condBoxes = '';
+  if(d.vista || d.cartao || d.outro){
+    var pagItens = '';
+    if(d.vista){
+      pagItens += '<div class="cond-item"><div class="cond-item-label">💵 À vista'+(d.vista.desconto?' (com desconto)':'')+'</div><div class="cond-item-val">R$ '+fmtValor(d.totalGeral*(1-(d.vista.desconto||0)/100))+'</div></div>';
+    }
+    if(d.cartao){
+      pagItens += '<div class="cond-item"><div class="cond-item-label">💳 Cartão de Crédito (Visa e Master)</div><div class="cond-item-val">'+d.cartao.parcelas+'x de R$ '+fmtValor(d.totalGeral/d.cartao.parcelas)+'</div></div>';
+    }
+    if(d.outro && d.outro.label){
+      pagItens += '<div class="cond-item"><div class="cond-item-label">'+escHtml(d.outro.label)+'</div>'+(d.outro.descricao?'<div class="cond-obs-texto">'+escHtml(d.outro.descricao)+'</div>':'')+'</div>';
+    }
+    condBoxes = '<div class="cond-grid">'+
+      '<div class="cond-box"><div class="cond-box-titulo">Formas de pagamento</div>'+pagItens+'</div>'+
+      '<div class="cond-box"><div class="cond-box-titulo">📄 Observações</div><div class="cond-obs-texto">'+(d.observacoes?escHtml(d.observacoes).replace(/\n/g,'<br>'):'—')+'</div></div>'+
+    '</div>';
+  }
+
   el.innerHTML =
     capa +
     '<h2 class="servico-titulo">'+escHtml(d.servico||'Proposta')+'</h2>'+
     '<div class="sub">'+escHtml(d.cliente||'')+(d.marca?' · '+escHtml(d.marca):'')+'</div>'+
-    tabelaItens + linhaServico +
+    tabela +
+    '<div class="total-bar"><span class="total-label">Valor total do investimento</span><span class="total-val">R$ '+fmtValor(d.totalGeral)+'</span></div>'+
+    condBoxes +
     (d.obs ? '<div class="obs">'+escHtml(d.obs)+'</div>' : '') +
-    '<div class="total-wrap"><span class="total-label">Investimento total</span><span class="total-val">R$ '+fmtValor(d.totalGeral)+'</span></div>'+
     '<div class="rodape">SafeZone Smart — Conexões Inteligentes · Segurança eletrônica, redes e automação residencial<br>Qualquer dúvida, é só chamar no WhatsApp.</div>';
 }
 

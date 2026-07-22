@@ -58,6 +58,9 @@
   .pag-opcao-label{font-size:13px;font-weight:700;color:#1f2937}
   .pag-opcao-desc{font-size:11.5px;color:#6b7280;margin-top:3px;line-height:1.5}
   .pag-opcao-val{font-size:14px;font-weight:800;color:#79B913;white-space:nowrap}
+  .pag-parcelas-select{margin-top:8px;width:100%;height:36px;border:1px solid #d1d5db;border-radius:7px;padding:0 10px;font-size:12.5px;font-family:'Montserrat',sans-serif;color:#1f2937;background:#fff}
+  @keyframes gpPulso{0%,100%{box-shadow:0 0 0 3px rgba(220,38,38,.6)}50%{box-shadow:0 0 0 3px rgba(220,38,38,0)}}
+  .campo-alerta{animation:gpPulso .6s ease-in-out 3;border-radius:8px}
   .servicos-divisor{display:flex;align-items:center;gap:8px;margin:18px 0 12px}
   .servicos-divisor .linha{flex:1;height:1px;background:#e5e7eb}
   .servicos-divisor span{font-size:9.5px;font-weight:800;text-transform:uppercase;letter-spacing:.5px;color:#374151}
@@ -278,8 +281,9 @@ function opcoesPagamentoHtml(d){
   });
   if(d.cartao) opcoes.push({
     valor: 'cartao', label: '💳 Cartão de Crédito (Visa e Master)',
-    desc: d.cartao.parcelas+'x sem juros no cartão',
-    total: d.totalGeral/d.cartao.parcelas, sufixoTotal: '/mês'
+    desc: 'Sem juros — escolha o número de parcelas:',
+    total: d.totalGeral/d.cartao.parcelas, sufixoTotal: '/mês',
+    parcelasMax: d.cartao.parcelas
   });
   if(d.outro && d.outro.label) opcoes.push({
     valor: 'outro', label: escHtml(d.outro.label), desc: d.outro.descricao?escHtml(d.outro.descricao):'',
@@ -287,15 +291,29 @@ function opcoesPagamentoHtml(d){
   });
   if(!opcoes.length) return '';
   var unica = opcoes.length === 1;
-  return '<label>Forma de pagamento</label>'+
+  return '<div id="ac-pagamento-wrap"><label>Forma de pagamento</label>'+
     opcoes.map(function(o, i){
       var checked = unica ? ' checked' : '';
+      var seletorParcelas = '';
+      if(o.parcelasMax){
+        var optsParcelas = '';
+        for(var n=1; n<=o.parcelasMax; n++){ optsParcelas += '<option value="'+n+'"'+(n===o.parcelasMax?' selected':'')+'>'+n+'x de R$ '+fmtValor(d.totalGeral/n)+'</option>'; }
+        seletorParcelas = '<select id="ac-parcelas-select" class="pag-parcelas-select" onclick="event.stopPropagation()" onchange="atualizarParcelas(this)">'+optsParcelas+'</select>';
+      }
       return '<label class="pag-opcao'+(unica?' selecionada':'')+'" onclick="marcarPagamentoSelecionado(this)">'+
         '<input type="radio" name="ac-pagamento" value="'+o.valor+'"'+checked+'>'+
-        '<div class="pag-opcao-texto"><div class="pag-opcao-label">'+o.label+'</div>'+(o.desc?'<div class="pag-opcao-desc">'+o.desc+'</div>':'')+'</div>'+
-        (o.total!=null ? '<div class="pag-opcao-val">R$ '+fmtValor(o.total)+(o.sufixoTotal||'')+'</div>' : '')+
+        '<div class="pag-opcao-texto"><div class="pag-opcao-label">'+o.label+'</div>'+(o.desc?'<div class="pag-opcao-desc">'+o.desc+'</div>':'')+seletorParcelas+'</div>'+
+        (o.total!=null ? '<div class="pag-opcao-val" id="'+(o.valor==='cartao'?'ac-parcelas-valor':'')+'">R$ '+fmtValor(o.total)+(o.sufixoTotal||'')+'</div>' : '')+
       '</label>';
-    }).join('');
+    }).join('')+'</div>';
+}
+
+function atualizarParcelas(select){
+  marcarPagamentoSelecionado(select.closest('.pag-opcao'));
+  var d = _dadosProposta || {};
+  var parcelas = parseInt(select.value,10) || 1;
+  var valorEl = document.getElementById('ac-parcelas-valor');
+  if(valorEl) valorEl.textContent = 'R$ '+fmtValor(d.totalGeral/parcelas)+'/mês';
 }
 
 function conteudoAceiteHtml(d){
@@ -306,9 +324,9 @@ function conteudoAceiteHtml(d){
     '<input type="text" id="ac-nome" placeholder="Seu nome completo">'+
     '<label>CPF</label>'+
     '<input type="text" id="ac-cpf" placeholder="000.000.000-00" oninput="mascaraCPF(this)">'+
-    '<div class="check-wrap"><input type="checkbox" id="ac-check"><span>Li e concordo com os termos, valores e condições desta proposta comercial da SafeZone Smart.</span></div>'+
+    '<div class="check-wrap" id="ac-check-wrap"><input type="checkbox" id="ac-check"><span>Li e concordo com os termos, valores e condições desta proposta comercial da SafeZone Smart.</span></div>'+
     '<div id="ac-erro" class="erro" style="display:none"></div>'+
-    '<button id="ac-btn" onclick="confirmarAceite()">✅ Confirmar aceite</button>'+
+    '<button id="ac-btn" onclick="confirmarAceite()">✅ Aceitar proposta comercial</button>'+
     '<div class="rodape-legal">Ao confirmar, seu nome, CPF, forma de pagamento escolhida, data e hora ficam registrados como aceite eletrônico desta proposta, nos termos da legislação brasileira sobre assinatura eletrônica (MP 2.200-2/2001).</div>'+
     footerHtml();
 }
@@ -316,6 +334,15 @@ function conteudoAceiteHtml(d){
 function marcarPagamentoSelecionado(el){
   document.querySelectorAll('.pag-opcao').forEach(function(x){ x.classList.remove('selecionada'); });
   el.classList.add('selecionada');
+}
+
+// Mesmo pulso vermelho (.campo-alerta) usado no SafeZone HUB, replicado aqui — destaca
+// visualmente qual campo precisa de atenção, além da mensagem de erro em texto.
+function destacarCampoErro(elId){
+  var el = document.getElementById(elId);
+  if(!el) return;
+  el.classList.add('campo-alerta');
+  setTimeout(function(){ el.classList.remove('campo-alerta'); }, 1800);
 }
 
 function renderProposta(){
@@ -339,10 +366,10 @@ function confirmarAceite(){
   var temOpcoesPagamento = !!(d.vista || d.cartao || d.outro);
   var radioSelecionado = document.querySelector('input[name="ac-pagamento"]:checked');
 
-  if(temOpcoesPagamento && !radioSelecionado){ erroEl.textContent = 'Selecione a forma de pagamento.'; erroEl.style.display='block'; return; }
-  if(!nome || nome.split(' ').length < 2){ erroEl.textContent = 'Informe seu nome completo.'; erroEl.style.display='block'; return; }
-  if(cpfDigits.length !== 11){ erroEl.textContent = 'CPF inválido.'; erroEl.style.display='block'; return; }
-  if(!check){ erroEl.textContent = 'Marque que você leu e concorda com os termos.'; erroEl.style.display='block'; return; }
+  if(temOpcoesPagamento && !radioSelecionado){ erroEl.textContent = 'Selecione a forma de pagamento.'; erroEl.style.display='block'; destacarCampoErro('ac-pagamento-wrap'); return; }
+  if(!nome || nome.split(' ').length < 2){ erroEl.textContent = 'Informe seu nome completo.'; erroEl.style.display='block'; destacarCampoErro('ac-nome'); return; }
+  if(cpfDigits.length !== 11){ erroEl.textContent = 'CPF inválido.'; erroEl.style.display='block'; destacarCampoErro('ac-cpf'); return; }
+  if(!check){ erroEl.textContent = 'Marque que você leu e concorda com os termos.'; erroEl.style.display='block'; destacarCampoErro('ac-check-wrap'); return; }
   erroEl.style.display='none';
 
   var btn = document.getElementById('ac-btn');
@@ -350,6 +377,12 @@ function confirmarAceite(){
 
   var formaPagamento = radioSelecionado ? radioSelecionado.value : '';
   var formaPagamentoLabel = radioSelecionado ? (radioSelecionado.closest('.pag-opcao').querySelector('.pag-opcao-label').textContent||'') : '';
+  var parcelasEscolhidas = null;
+  if(formaPagamento === 'cartao'){
+    var selParc = document.getElementById('ac-parcelas-select');
+    parcelasEscolhidas = selParc ? parseInt(selParc.value,10) : null;
+    if(parcelasEscolhidas) formaPagamentoLabel += ' — '+parcelasEscolhidas+'x';
+  }
 
   var registro = {
     token: _token,
@@ -359,6 +392,7 @@ function confirmarAceite(){
     cpf: cpfDigits,
     formaPagamento: formaPagamento,
     formaPagamentoLabel: formaPagamentoLabel,
+    parcelasEscolhidas: parcelasEscolhidas,
     aceito: true,
     processadoHub: false,
     userAgent: navigator.userAgent,
@@ -375,7 +409,7 @@ function confirmarAceite(){
   }).catch(function(e){
     erroEl.textContent = 'Erro ao registrar: '+e.message+'. Tente novamente.';
     erroEl.style.display = 'block';
-    btn.disabled = false; btn.textContent = '✅ Confirmar aceite';
+    btn.disabled = false; btn.textContent = '✅ Aceitar proposta comercial';
   });
 }
 
@@ -383,7 +417,7 @@ function renderJaAceito(){
   var el = document.getElementById('paginas');
   el.innerHTML = montarPaginaHtml('<div class="sucesso"><div class="icone">✅</div>'+
     '<h1 style="text-transform:none;font-size:22px;color:#2D3748">Proposta aceita!</h1>'+
-    '<div class="sub" style="margin-top:8px">Obrigado! A equipe da SafeZone Smart já foi avisada e vai entrar em contato pra dar sequência.</div></div>');
+    '<div class="sub" style="margin-top:8px">Muito obrigado por escolher os serviços da SafeZone Smart! Nossa equipe já foi avisada e vai retornar o contato pra dar sequência.</div></div>');
 }
 
 init();

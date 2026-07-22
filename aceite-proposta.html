@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Aceite de Proposta — SafeZone Smart</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:'Montserrat',sans-serif;background:#f3f4f6;color:#374151;min-height:100vh;display:flex;align-items:center;justify-content:center;padding:24px}
+  .page{background:#fff;border-radius:14px;box-shadow:0 10px 40px rgba(0,0,0,.08);max-width:560px;width:100%;padding:40px 36px;position:relative;overflow:hidden}
+  .page-header{margin-bottom:22px}
+  .eyebrow{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:2px;color:#9ca3af;display:block;margin-top:18px}
+  h1{font-size:28px;font-weight:900;color:#2D3748;letter-spacing:-.5px;text-transform:uppercase;margin-top:4px;margin-bottom:6px}
+  .sub{font-size:13px;color:#6b7280;margin-bottom:20px}
+  .bloco{background:#f9fafb;border:1px solid #e5e7eb;border-radius:10px;padding:16px 18px;margin-bottom:20px}
+  .linha{display:flex;justify-content:space-between;font-size:13px;padding:5px 0;color:#374151}
+  .linha b{color:#1f2937;font-weight:700}
+  .total-wrap{border-top:1px solid #e5e7eb;margin-top:8px;padding-top:10px;display:flex;justify-content:space-between;align-items:baseline}
+  .total-label{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:#6b7280}
+  .total-val{font-size:24px;font-weight:900;color:#79B913}
+  label{display:block;font-size:11px;font-weight:700;color:#6b7280;text-transform:uppercase;letter-spacing:.5px;margin-bottom:6px;margin-top:16px}
+  input[type=text]{width:100%;height:44px;border:1px solid #d1d5db;border-radius:8px;padding:0 14px;font-size:14px;font-family:'Montserrat',sans-serif;color:#1f2937}
+  input[type=text]:focus{outline:none;border-color:#79B913}
+  .check-wrap{display:flex;align-items:flex-start;gap:9px;margin-top:18px;font-size:12.5px;color:#4b5563;line-height:1.5}
+  .check-wrap input{width:18px;height:18px;flex-shrink:0;margin-top:2px;accent-color:#79B913}
+  button{width:100%;height:50px;background:#79B913;color:#fff;border:none;border-radius:9px;font-size:14px;font-weight:800;font-family:'Montserrat',sans-serif;margin-top:20px;cursor:pointer;transition:opacity .2s}
+  button:hover{opacity:.9}
+  button:disabled{background:#d1d5db;cursor:not-allowed}
+  .erro{color:#dc2626;font-size:12px;margin-top:8px;font-weight:600}
+  .sucesso{text-align:center;padding:20px 0}
+  .sucesso .icone{font-size:52px;margin-bottom:14px}
+  .rodape{font-size:10px;color:#9ca3af;text-align:center;margin-top:20px;line-height:1.5}
+  .logo-row{display:flex;align-items:center;justify-content:space-between}
+  .logo-row img{height:44px;width:auto;object-fit:contain}
+  .selo{font-size:10px;font-weight:700;color:#79B913;border:1px solid #C0DD97;background:#EAF3DE;padding:4px 10px;border-radius:20px}
+</style>
+</head>
+<body>
+<div class="page">
+  <div class="page-header">
+    <div class="logo-row">
+      <img src="imagens/logo.png" alt="SafeZone Smart" onerror="this.src='https://placehold.co/160x50?text=SafeZone+Smart'">
+      <span class="selo">🔒 Aceite eletrônico</span>
+    </div>
+    <span class="eyebrow">Confirmação de proposta</span>
+  </div>
+  <div id="conteudo"><div style="text-align:center;color:#9ca3af;font-size:13px;padding:40px 0">Carregando proposta...</div></div>
+</div>
+
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+<script>
+const firebaseConfig = {
+  apiKey: "AIzaSyCmc3t-fyBaBACjf2wVR3LdPlypfMk1eBU",
+  authDomain: "safezone-os.firebaseapp.com",
+  projectId: "safezone-os",
+  storageBucket: "safezone-os.firebasestorage.app",
+  messagingSenderId: "890631820717",
+  appId: "1:890631820717:web:e7a3b5d5af8513f1de7d24"
+};
+firebase.initializeApp(firebaseConfig);
+const db = firebase.firestore();
+
+function getToken(){
+  var p = new URLSearchParams(window.location.search);
+  return p.get('id') || '';
+}
+function fmtValor(v){ return Number(v||0).toLocaleString('pt-BR',{minimumFractionDigits:2,maximumFractionDigits:2}); }
+function escHtml(s){ var d=document.createElement('div'); d.textContent=s||''; return d.innerHTML; }
+
+function mascaraCPF(el){
+  var v = el.value.replace(/\D/g,'');
+  if(v.length > 11) v = v.slice(0,11);
+  v = v.replace(/^(\d{3})(\d)/, '$1.$2');
+  v = v.replace(/^(\d{3})\.(\d{3})(\d)/, '$1.$2.$3');
+  v = v.replace(/\.(\d{3})(\d{1,2})$/, '.$1-$2');
+  el.value = v;
+}
+
+var _dadosProposta = null;
+var _token = getToken();
+
+function init(){
+  var el = document.getElementById('conteudo');
+  if(!_token){
+    el.innerHTML = '<h1 style="font-size:18px;color:#dc2626;text-transform:none">Link inválido</h1><div class="sub">Peça pra SafeZone reenviar o link da proposta.</div>';
+    return;
+  }
+  db.collection('propostas_publicas').doc(_token).get().then(function(snap){
+    if(!snap.exists){
+      el.innerHTML = '<h1 style="font-size:18px;color:#dc2626;text-transform:none">Proposta não encontrada</h1><div class="sub">O link pode ter expirado. Fale com a SafeZone.</div>';
+      return;
+    }
+    _dadosProposta = snap.data();
+    if(_dadosProposta.aceitoEm){
+      renderJaAceito();
+      return;
+    }
+    renderProposta();
+  }).catch(function(e){
+    el.innerHTML = '<div class="erro">Erro ao carregar: '+escHtml(e.message)+'</div>';
+  });
+}
+
+function renderProposta(){
+  var d = _dadosProposta;
+  var el = document.getElementById('conteudo');
+  var itens = d.itens||[];
+  var linhasItens = itens.map(function(it){
+    return '<div class="linha"><span>'+escHtml(it.nome||'')+' ('+(it.qtd||1)+'x)</span><b>R$ '+fmtValor((it.qtd||1)*(it.unit||0))+'</b></div>';
+  }).join('');
+  el.innerHTML =
+    '<h1>'+escHtml(d.servico||'Proposta')+'</h1>'+
+    '<div class="sub">Preparada para '+escHtml(d.cliente||'')+'</div>'+
+    '<div class="bloco">'+
+      linhasItens+
+      (d.valorServicos ? '<div class="linha"><span>Serviços técnicos</span><b>R$ '+fmtValor(d.valorServicos)+'</b></div>' : '')+
+      '<div class="total-wrap"><span class="total-label">Valor total</span><span class="total-val">R$ '+fmtValor(d.totalGeral)+'</span></div>'+
+    '</div>'+
+    (d.obs ? '<div class="bloco" style="font-size:12px;color:#4b5563;white-space:pre-wrap">'+escHtml(d.obs)+'</div>' : '')+
+    '<label>Nome completo</label>'+
+    '<input type="text" id="ac-nome" placeholder="Seu nome completo">'+
+    '<label>CPF</label>'+
+    '<input type="text" id="ac-cpf" placeholder="000.000.000-00" oninput="mascaraCPF(this)">'+
+    '<div class="check-wrap"><input type="checkbox" id="ac-check"><span>Li e concordo com os termos, valores e condições desta proposta comercial da SafeZone Smart.</span></div>'+
+    '<div id="ac-erro" class="erro" style="display:none"></div>'+
+    '<button id="ac-btn" onclick="confirmarAceite()">✅ Confirmar aceite</button>'+
+    '<div class="rodape">Ao confirmar, seu nome, CPF, data e hora ficam registrados como aceite eletrônico desta proposta, nos termos da legislação brasileira sobre assinatura eletrônica (MP 2.200-2/2001).</div>';
+}
+
+function confirmarAceite(){
+  var nome = document.getElementById('ac-nome').value.trim();
+  var cpf = document.getElementById('ac-cpf').value.trim();
+  var check = document.getElementById('ac-check').checked;
+  var erroEl = document.getElementById('ac-erro');
+  var cpfDigits = cpf.replace(/\D/g,'');
+  if(!nome || nome.split(' ').length < 2){ erroEl.textContent = 'Informe seu nome completo.'; erroEl.style.display='block'; return; }
+  if(cpfDigits.length !== 11){ erroEl.textContent = 'CPF inválido.'; erroEl.style.display='block'; return; }
+  if(!check){ erroEl.textContent = 'Marque que você leu e concorda com os termos.'; erroEl.style.display='block'; return; }
+  erroEl.style.display='none';
+
+  var btn = document.getElementById('ac-btn');
+  btn.disabled = true; btn.textContent = 'Enviando...';
+
+  var registro = {
+    token: _token,
+    propostaId: _dadosProposta.propostaId||'',
+    orcamentoId: _dadosProposta.orcamentoId||'',
+    nomeDigitado: nome,
+    cpf: cpfDigits,
+    aceito: true,
+    processadoHub: false,
+    userAgent: navigator.userAgent,
+    criadoEm: firebase.firestore.FieldValue.serverTimestamp()
+  };
+
+  db.collection('aceites_propostas').add(registro).then(function(){
+    return db.collection('propostas_publicas').doc(_token).update({
+      aceitoEm: firebase.firestore.FieldValue.serverTimestamp(),
+      aceitoNome: nome, aceitoCpf: cpfDigits
+    });
+  }).then(function(){
+    renderJaAceito();
+  }).catch(function(e){
+    erroEl.textContent = 'Erro ao registrar: '+e.message+'. Tente novamente.';
+    erroEl.style.display = 'block';
+    btn.disabled = false; btn.textContent = '✅ Confirmar aceite';
+  });
+}
+
+function renderJaAceito(){
+  var el = document.getElementById('conteudo');
+  el.innerHTML = '<div class="sucesso"><div class="icone">✅</div>'+
+    '<h1 style="text-transform:none;font-size:22px">Proposta aceita!</h1>'+
+    '<div class="sub" style="margin-top:8px">Obrigado! A equipe da SafeZone Smart já foi avisada e vai entrar em contato pra dar sequência.</div></div>';
+}
+
+init();
+</script>
+</body>
+</html>

@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Proposta — SafeZone Smart</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:'Montserrat',sans-serif;background:#f3f4f6;color:#374151;min-height:100vh;padding:24px;display:flex;justify-content:center}
+  .page{background:#fff;border-radius:14px;box-shadow:0 10px 40px rgba(0,0,0,.08);max-width:620px;width:100%;padding:40px 36px}
+  .logo-row{display:flex;align-items:center;justify-content:space-between;margin-bottom:6px}
+  .logo-row img{height:44px;width:auto;object-fit:contain}
+  .eyebrow{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:2px;color:#9ca3af;display:block;margin-top:18px}
+  h1{font-size:26px;font-weight:900;color:#2D3748;letter-spacing:-.5px;text-transform:uppercase;margin-top:4px;margin-bottom:6px}
+  .sub{font-size:13px;color:#6b7280;margin-bottom:22px}
+  table{width:100%;border-collapse:collapse;margin-bottom:14px}
+  th{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;color:#9ca3af;text-align:left;padding:0 0 8px;border-bottom:1px solid #e5e7eb}
+  th.num,td.num{text-align:right}
+  td{font-size:13px;color:#374151;padding:8px 0;border-bottom:1px solid #f3f4f6}
+  .obs{font-size:12.5px;color:#4b5563;line-height:1.6;background:#f9fafb;border:1px solid #e5e7eb;border-radius:10px;padding:14px 16px;margin-bottom:18px;white-space:pre-wrap}
+  .total-wrap{border-top:2px solid #e5e7eb;margin-top:6px;padding-top:14px;display:flex;justify-content:space-between;align-items:baseline}
+  .total-label{font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:#6b7280}
+  .total-val{font-size:28px;font-weight:900;color:#79B913}
+  .rodape{font-size:11px;color:#9ca3af;text-align:center;margin-top:26px;line-height:1.6}
+  .selo{font-size:10px;font-weight:700;color:#79B913;border:1px solid #C0DD97;background:#EAF3DE;padding:4px 10px;border-radius:20px}
+  .erro{color:#dc2626;font-size:14px;text-transform:none;font-weight:700}
+</style>
+</head>
+<body>
+<div class="page">
+  <div class="logo-row">
+    <img src="imagens/logo.png" alt="SafeZone Smart" onerror="this.src='https://placehold.co/160x50?text=SafeZone+Smart'">
+    <span class="selo">📄 Proposta comercial</span>
+  </div>
+  <span class="eyebrow">Preparado especialmente para você</span>
+  <div id="conteudo"><div style="text-align:center;color:#9ca3af;font-size:13px;padding:40px 0">Carregando proposta...</div></div>
+</div>
+
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+<script>
+const firebaseConfig = {
+  apiKey: "AIzaSyCmc3t-fyBaBACjf2wVR3LdPlypfMk1eBU",
+  authDomain: "safezone-os.firebaseapp.com",
+  projectId: "safezone-os",
+  storageBucket: "safezone-os.firebasestorage.app",
+  messagingSenderId: "890631820717",
+  appId: "1:890631820717:web:e7a3b5d5af8513f1de7d24"
+};
+firebase.initializeApp(firebaseConfig);
+const db = firebase.firestore();
+
+function getToken(){ var p = new URLSearchParams(window.location.search); return p.get('id') || ''; }
+function fmtValor(v){ return Number(v||0).toLocaleString('pt-BR',{minimumFractionDigits:2,maximumFractionDigits:2}); }
+function escHtml(s){ var d=document.createElement('div'); d.textContent=s||''; return d.innerHTML; }
+
+var _token = getToken();
+
+function init(){
+  var el = document.getElementById('conteudo');
+  if(!_token){
+    el.innerHTML = '<h1 class="erro">Link inválido</h1><div class="sub">Peça pra SafeZone reenviar o link da proposta.</div>';
+    return;
+  }
+  db.collection('propostas_publicas').doc(_token).get().then(function(snap){
+    if(!snap.exists){
+      el.innerHTML = '<h1 class="erro">Proposta não encontrada</h1><div class="sub">O link pode ter expirado. Fale com a SafeZone.</div>';
+      return;
+    }
+    renderProposta(snap.data());
+  }).catch(function(e){
+    el.innerHTML = '<div class="erro">Erro ao carregar: '+escHtml(e.message)+'</div>';
+  });
+}
+
+function renderProposta(d){
+  var el = document.getElementById('conteudo');
+  var itens = d.itens||[];
+  var linhasItens = itens.map(function(it){
+    return '<tr><td>'+escHtml(it.nome||'')+'</td><td class="num">'+(it.qtd||1)+'</td><td class="num">R$ '+fmtValor(it.unit)+'</td><td class="num">R$ '+fmtValor((it.qtd||1)*(it.unit||0))+'</td></tr>';
+  }).join('');
+  var tabelaItens = itens.length ? (
+    '<table><thead><tr><th>Item</th><th class="num">Qtd</th><th class="num">Unit.</th><th class="num">Total</th></tr></thead><tbody>'+linhasItens+'</tbody></table>'
+  ) : '';
+  var linhaServico = d.valorServicos ? (
+    '<table><tbody><tr><td>Serviços técnicos</td><td class="num" colspan="3">R$ '+fmtValor(d.valorServicos)+'</td></tr></tbody></table>'
+  ) : '';
+
+  el.innerHTML =
+    '<h1>'+escHtml(d.servico||'Proposta')+'</h1>'+
+    '<div class="sub">'+escHtml(d.cliente||'')+(d.marca?' · '+escHtml(d.marca):'')+'</div>'+
+    tabelaItens + linhaServico +
+    (d.obs ? '<div class="obs">'+escHtml(d.obs)+'</div>' : '') +
+    '<div class="total-wrap"><span class="total-label">Investimento total</span><span class="total-val">R$ '+fmtValor(d.totalGeral)+'</span></div>'+
+    '<div class="rodape">SafeZone Smart — Conexões Inteligentes · Segurança eletrônica, redes e automação residencial<br>Qualquer dúvida, é só chamar no WhatsApp.</div>';
+}
+
+init();
+</script>
+</body>
+</html>

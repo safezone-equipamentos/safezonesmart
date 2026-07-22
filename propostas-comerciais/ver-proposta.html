@@ -98,7 +98,7 @@
     .cond-obs-texto,.obs{font-size:11px;text-align:justify}
     .servicos-grid{grid-template-columns:repeat(5,1fr);gap:6px}
     .servico-item{flex-direction:column;text-align:center;padding:6px 3px}
-    .servico-item:last-child{grid-column:auto}
+    .servicos-grid .servico-item:last-child{grid-column:auto}
     .nome-extra{display:none}
     .servico-icone{width:20px;height:20px;margin:0 auto 4px}
     .servico-nome{font-size:7px}
@@ -234,7 +234,7 @@ function conteudoServicoHtml(d){
   }
 
   return '<div class="servico-titulo">'+escHtml((d.servico||'PROPOSTA').toUpperCase())+'</div>'+
-    '<div class="sub">'+escHtml(d.cliente||'')+(d.marca?' · '+escHtml(d.marca):'')+'</div>'+
+    (d.descricao ? '<div class="capa-texto" style="margin:6px 0 16px">'+escHtml(d.descricao).replace(/\n/g,'<br>')+'</div>' : '') +
     tabela +
     (d.marcaLogo ? '<img class="fabricante-logo" src="'+escHtml(d.marcaLogo)+'" alt="'+escHtml(d.marca||'')+'">' : '') +
     '<div class="total-bar"><span class="total-label">Valor total do investimento</span><span class="total-val">R$ '+fmtValor(d.totalGeral)+'</span></div>'+

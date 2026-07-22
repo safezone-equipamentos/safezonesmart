@@ -12,56 +12,92 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
 <style>
+  /* ===== BASE = MOBILE (padrão, sem media query) ===== */
   *{box-sizing:border-box;margin:0;padding:0}
-  body{font-family:'Montserrat',sans-serif;background:#f3f4f6;color:#374151;min-height:100vh;padding:24px 12px;display:flex;justify-content:center}
-  .wrap{max-width:640px;width:100%}
-  #paginas{display:flex;flex-direction:column;gap:16px}
-  .capa-img{width:100%;border-radius:10px;margin-bottom:16px;display:block}
-  .gp-page{background:#fff;border-radius:10px;box-shadow:0 4px 20px rgba(0,0,0,.08);position:relative;overflow:hidden;margin-bottom:16px}
-  .gp-watermark{position:absolute;top:15%;right:-10px;width:180px;opacity:.4;pointer-events:none;z-index:0}
-  .gp-header-right{position:absolute;top:0;right:0;width:34%;height:auto;pointer-events:none;z-index:1}
-  .gp-content{padding:28px 26px;position:relative;z-index:2}
-  .gp-header{display:flex;align-items:center;margin-bottom:20px;padding-bottom:14px}
-  .gp-logo{height:38px;width:auto;object-fit:contain}
-  .eyebrow{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:2px;color:#9ca3af;display:block;margin-bottom:6px}
-  .capa-titulo{font-size:26px;font-weight:900;color:#2D3748;letter-spacing:-.5px;text-transform:uppercase;margin-bottom:14px}
-  .capa-texto{font-size:12px;color:#374151;line-height:1.65;text-align:justify;font-weight:300}
-  .abertura-imgs{margin-top:18px;display:grid;gap:10px}
-  .abertura-imgs.g1{grid-template-columns:1fr}
-  .abertura-imgs.g2{grid-template-columns:1fr 1fr}
-  .abertura-imgs img{width:100%;max-height:220px;object-fit:cover;border-radius:14px;box-shadow:0 6px 16px rgba(0,0,0,.15);display:block}
-  .servico-titulo{font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:.5px;color:#6b7280;margin-bottom:2px}
-  .sub{font-size:12px;color:#9ca3af;margin-bottom:16px}
-  table{width:100%;border-collapse:collapse;margin-bottom:14px;font-size:11px}
-  thead th{background:#79B913;color:#fff;font-weight:700;text-align:left;padding:6px 8px}
+  body{font-family:'Montserrat',sans-serif;background:#f3f4f6;color:#374151;min-height:100vh;padding:16px 10px;display:flex;justify-content:center}
+  .wrap{max-width:480px;width:100%}
+  #paginas{display:flex;flex-direction:column;gap:14px}
+  .capa-img{width:100%;border-radius:10px;margin-bottom:14px;display:block}
+  .gp-page{background:#fff;border-radius:12px;box-shadow:0 4px 16px rgba(0,0,0,.08);position:relative;overflow:hidden}
+  .gp-watermark{position:absolute;top:15%;right:-10px;width:150px;opacity:.35;pointer-events:none;z-index:0}
+  .gp-header-right{position:absolute;top:0;right:0;width:30%;height:auto;pointer-events:none;z-index:1}
+  .gp-content{padding:20px 16px;position:relative;z-index:2}
+  .gp-header{display:flex;align-items:center;margin-bottom:18px;padding-bottom:12px}
+  .gp-logo{height:32px;width:auto;object-fit:contain}
+  .eyebrow{font-size:10.5px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:#9ca3af;display:block;margin-bottom:8px}
+  .capa-titulo{font-size:21px;font-weight:900;color:#2D3748;letter-spacing:-.3px;text-transform:uppercase;margin-bottom:12px;line-height:1.25}
+  .capa-texto{font-size:14px;color:#374151;line-height:1.7;text-align:left;font-weight:400}
+  .abertura-imgs{margin-top:16px;display:grid;gap:8px;grid-template-columns:1fr}
+  .abertura-imgs img{width:100%;max-height:170px;object-fit:cover;border-radius:12px;box-shadow:0 6px 16px rgba(0,0,0,.15);display:block}
+  .servico-titulo{font-size:12px;font-weight:800;text-transform:uppercase;letter-spacing:.5px;color:#6b7280;margin-bottom:3px}
+  .sub{font-size:13px;color:#9ca3af;margin-bottom:16px}
+  table{width:100%;border-collapse:collapse;margin-bottom:16px;font-size:12.5px}
+  thead th{background:#79B913;color:#fff;font-weight:700;text-align:left;padding:8px 6px;font-size:10.5px}
   thead th:first-child{border-radius:6px 0 0 6px}
   thead th:last-child{border-radius:0 6px 6px 0}
-  th.num,td.num{text-align:right}
-  td{color:#1f2937;padding:6px 8px;border-bottom:1px solid #f3f4f6}
-  tr.servico-row td{font-weight:700;padding-top:9px}
-  .total-bar{background:#F0FDF4;border-radius:8px;padding:10px 14px;display:flex;justify-content:space-between;align-items:center;margin-bottom:16px}
-  .total-label{font-size:13px;font-weight:700;color:#1f2937}
-  .total-val{font-size:17px;font-weight:800;color:#79B913}
-  .fabricante-logo{display:block;height:36px;object-fit:contain;margin:0 auto 16px}
-  .cond-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:16px}
-  .cond-box{border:1px solid #e5e7eb;border-radius:12px;padding:10px}
-  .cond-box-titulo{font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:.4px;color:#374151;margin-bottom:8px}
-  .cond-item{margin-bottom:8px}
-  .cond-item-label{font-size:12px;font-weight:600;color:#4b5563}
-  .cond-item-val{font-size:13px;font-weight:800;color:#1f2937;margin-top:1px}
-  .cond-obs-texto{font-size:11px;color:#6b7280;line-height:1.6;text-align:justify;white-space:pre-wrap}
-  .obs{font-size:11px;color:#6b7280;line-height:1.6;background:#f9fafb;border:1px solid #e5e7eb;border-radius:10px;padding:12px 14px;margin-bottom:16px;white-space:pre-wrap}
-  .servicos-divisor{display:flex;align-items:center;gap:8px;margin:18px 0 10px}
+  th.num,td.num{text-align:right;white-space:nowrap}
+  td{color:#1f2937;padding:9px 6px;border-bottom:1px solid #f3f4f6;word-break:break-word}
+  tr.servico-row td{font-weight:700;padding-top:11px}
+  .total-bar{background:#F0FDF4;border-radius:10px;padding:14px;display:flex;flex-direction:column;gap:4px;margin-bottom:16px}
+  .total-label{font-size:12.5px;font-weight:700;color:#1f2937}
+  .total-val{font-size:22px;font-weight:800;color:#79B913}
+  .fabricante-logo{display:block;height:34px;object-fit:contain;margin:0 auto 16px}
+  .cond-grid{display:grid;grid-template-columns:1fr;gap:10px;margin-bottom:16px}
+  .cond-box{border:1px solid #e5e7eb;border-radius:12px;padding:12px}
+  .cond-box-titulo{font-size:11.5px;font-weight:800;text-transform:uppercase;letter-spacing:.4px;color:#374151;margin-bottom:9px}
+  .cond-item{margin-bottom:10px}
+  .cond-item:last-child{margin-bottom:0}
+  .cond-item-label{font-size:13px;font-weight:600;color:#4b5563}
+  .cond-item-val{font-size:15px;font-weight:800;color:#1f2937;margin-top:2px}
+  .cond-obs-texto{font-size:12.5px;color:#6b7280;line-height:1.65;text-align:left;white-space:pre-wrap}
+  .obs{font-size:12.5px;color:#6b7280;line-height:1.65;background:#f9fafb;border:1px solid #e5e7eb;border-radius:10px;padding:13px 14px;margin-bottom:16px;white-space:pre-wrap}
+  .servicos-divisor{display:flex;align-items:center;gap:8px;margin:18px 0 12px}
   .servicos-divisor .linha{flex:1;height:1px;background:#e5e7eb}
-  .servicos-divisor span{font-size:9px;font-weight:800;text-transform:uppercase;letter-spacing:.5px;color:#374151}
-  .servicos-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:6px;text-align:center;margin-bottom:14px}
-  .servico-item{padding:6px 3px;border:1px solid #f3f4f6;border-radius:9px;background:#fafafa}
-  .servico-icone{width:20px;height:20px;border-radius:50%;background:#F0FDF4;display:flex;align-items:center;justify-content:center;margin:0 auto 4px}
-  .servico-nome{font-size:7px;font-weight:700;color:#374151;text-transform:uppercase;letter-spacing:.2px}
-  .gp-footer-bar{border-top:1px solid #e5e7eb;padding-top:12px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;font-size:9px;color:#4B5563;font-weight:600}
-  .gp-footer-item{display:flex;align-items:center;gap:4px}
-  h1{font-size:18px;color:#dc2626;font-weight:800}
-  @media (max-width:480px){ .cond-grid,.servicos-grid{grid-template-columns:1fr 1fr} .gp-content{padding:20px 16px} }
+  .servicos-divisor span{font-size:9.5px;font-weight:800;text-transform:uppercase;letter-spacing:.5px;color:#374151}
+  .servicos-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;text-align:center;margin-bottom:14px}
+  .servico-item{padding:10px 6px;border:1px solid #f3f4f6;border-radius:10px;background:#fafafa;display:flex;align-items:center;gap:8px;text-align:left}
+  .servico-icone{width:26px;height:26px;flex-shrink:0;border-radius:50%;background:#F0FDF4;display:flex;align-items:center;justify-content:center}
+  .servico-nome{font-size:10.5px;font-weight:700;color:#374151;text-transform:uppercase;letter-spacing:.2px}
+  .gp-footer-bar{border-top:1px solid #e5e7eb;padding-top:12px;display:flex;flex-direction:column;gap:8px;font-size:11px;color:#4B5563;font-weight:600}
+  .gp-footer-item{display:flex;align-items:center;gap:6px}
+  h1{font-size:19px;color:#dc2626;font-weight:800}
+
+  /* ===== DESKTOP (telas ≥ 720px): layout mais denso, fiel ao PDF impresso ===== */
+  @media (min-width:720px){
+    body{padding:32px 16px}
+    .wrap{max-width:640px}
+    #paginas{gap:16px}
+    .capa-img{margin-bottom:16px}
+    .gp-content{padding:28px 26px}
+    .gp-header{margin-bottom:20px;padding-bottom:14px}
+    .gp-logo{height:38px}
+    .eyebrow{font-size:10px;letter-spacing:2px;margin-bottom:6px}
+    .capa-titulo{font-size:26px;letter-spacing:-.5px;margin-bottom:14px;line-height:1.2}
+    .capa-texto{font-size:12px;line-height:1.65;text-align:justify;font-weight:300}
+    .abertura-imgs{margin-top:18px;gap:10px}
+    .abertura-imgs.g2{grid-template-columns:1fr 1fr}
+    .abertura-imgs img{max-height:220px;border-radius:14px}
+    .servico-titulo{font-size:11px}
+    .sub{font-size:12px;margin-bottom:16px}
+    table{font-size:11px;margin-bottom:14px}
+    thead th{padding:6px 8px;font-size:11px}
+    td{padding:6px 8px}
+    tr.servico-row td{padding-top:9px}
+    .total-bar{flex-direction:row;justify-content:space-between;align-items:center;padding:10px 14px}
+    .total-val{font-size:17px}
+    .fabricante-logo{height:36px}
+    .cond-grid{grid-template-columns:1fr 1fr;gap:10px}
+    .cond-box{padding:10px}
+    .cond-item-label{font-size:12px}
+    .cond-item-val{font-size:13px}
+    .cond-obs-texto,.obs{font-size:11px;text-align:justify}
+    .servicos-grid{grid-template-columns:repeat(5,1fr);gap:6px}
+    .servico-item{flex-direction:column;text-align:center;padding:6px 3px}
+    .servico-icone{width:20px;height:20px;margin:0 auto 4px}
+    .servico-nome{font-size:7px}
+    .gp-footer-bar{flex-direction:row;justify-content:space-between;flex-wrap:wrap;font-size:9px}
+    h1{font-size:18px}
+  }
 </style>
 </head>
 <body>

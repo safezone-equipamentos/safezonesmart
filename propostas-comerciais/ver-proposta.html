@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Proposta — SafeZone Smart</title>
+<meta property="og:title" content="Sua proposta da SafeZone Smart">
+<meta property="og:description" content="Toque para ver os itens, valores e condições da sua proposta.">
+<meta property="og:image" content="https://safezonesmart.com.br/imagens/logo.png">
+<meta property="og:type" content="website">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:'Montserrat',sans-serif;background:#f3f4f6;color:#374151;min-height:100vh;padding:24px 12px;display:flex;justify-content:center}
+  .wrap{max-width:640px;width:100%}
+  #paginas{display:flex;flex-direction:column;gap:16px}
+  .capa-img{width:100%;border-radius:10px;margin-bottom:16px;display:block}
+  .gp-page{background:#fff;border-radius:10px;box-shadow:0 4px 20px rgba(0,0,0,.08);position:relative;overflow:hidden;margin-bottom:16px}
+  .gp-watermark{position:absolute;top:15%;right:-10px;width:180px;opacity:.4;pointer-events:none;z-index:0}
+  .gp-header-right{position:absolute;top:0;right:0;width:34%;height:auto;pointer-events:none;z-index:1}
+  .gp-content{padding:28px 26px;position:relative;z-index:2}
+  .gp-header{display:flex;align-items:center;margin-bottom:20px;padding-bottom:14px}
+  .gp-logo{height:38px;width:auto;object-fit:contain}
+  .eyebrow{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:2px;color:#9ca3af;display:block;margin-bottom:6px}
+  .capa-titulo{font-size:26px;font-weight:900;color:#2D3748;letter-spacing:-.5px;text-transform:uppercase;margin-bottom:14px}
+  .capa-texto{font-size:12px;color:#374151;line-height:1.65;text-align:justify;font-weight:300}
+  .servico-titulo{font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:.5px;color:#6b7280;margin-bottom:2px}
+  .sub{font-size:12px;color:#9ca3af;margin-bottom:16px}
+  table{width:100%;border-collapse:collapse;margin-bottom:14px;font-size:11px}
+  thead th{background:#79B913;color:#fff;font-weight:700;text-align:left;padding:6px 8px}
+  thead th:first-child{border-radius:6px 0 0 6px}
+  thead th:last-child{border-radius:0 6px 6px 0}
+  th.num,td.num{text-align:right}
+  td{color:#1f2937;padding:6px 8px;border-bottom:1px solid #f3f4f6}
+  tr.servico-row td{font-weight:700;padding-top:9px}
+  .total-bar{background:#F0FDF4;border-radius:8px;padding:10px 14px;display:flex;justify-content:space-between;align-items:center;margin-bottom:16px}
+  .total-label{font-size:13px;font-weight:700;color:#1f2937}
+  .total-val{font-size:17px;font-weight:800;color:#79B913}
+  .fabricante-logo{display:block;height:36px;object-fit:contain;margin:0 auto 16px}
+  .cond-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:16px}
+  .cond-box{border:1px solid #e5e7eb;border-radius:12px;padding:10px}
+  .cond-box-titulo{font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:.4px;color:#374151;margin-bottom:8px}
+  .cond-item{margin-bottom:8px}
+  .cond-item-label{font-size:12px;font-weight:600;color:#4b5563}
+  .cond-item-val{font-size:13px;font-weight:800;color:#1f2937;margin-top:1px}
+  .cond-obs-texto{font-size:11px;color:#6b7280;line-height:1.6;text-align:justify;white-space:pre-wrap}
+  .obs{font-size:11px;color:#6b7280;line-height:1.6;background:#f9fafb;border:1px solid #e5e7eb;border-radius:10px;padding:12px 14px;margin-bottom:16px;white-space:pre-wrap}
+  .servicos-divisor{display:flex;align-items:center;gap:8px;margin:18px 0 10px}
+  .servicos-divisor .linha{flex:1;height:1px;background:#e5e7eb}
+  .servicos-divisor span{font-size:9px;font-weight:800;text-transform:uppercase;letter-spacing:.5px;color:#374151}
+  .servicos-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:6px;text-align:center;margin-bottom:14px}
+  .servico-item{padding:6px 3px;border:1px solid #f3f4f6;border-radius:9px;background:#fafafa}
+  .servico-icone{width:20px;height:20px;border-radius:50%;background:#F0FDF4;display:flex;align-items:center;justify-content:center;margin:0 auto 4px}
+  .servico-nome{font-size:7px;font-weight:700;color:#374151;text-transform:uppercase;letter-spacing:.2px}
+  .gp-footer-bar{border-top:1px solid #e5e7eb;padding-top:12px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;font-size:9px;color:#4B5563;font-weight:600}
+  .gp-footer-item{display:flex;align-items:center;gap:4px}
+  h1{font-size:18px;color:#dc2626;font-weight:800}
+  @media (max-width:480px){ .cond-grid,.servicos-grid{grid-template-columns:1fr 1fr} .gp-content{padding:20px 16px} }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <img class="capa-img" src="/imagens/capa.png" alt="SafeZone Smart" onerror="this.style.display='none'">
+  <div id="paginas"><div class="gp-page"><div class="gp-content"><div style="text-align:center;color:#9ca3af;font-size:13px;padding:40px 0">Carregando proposta...</div></div></div></div>
+</div>
+
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+<script>
+const firebaseConfig = {
+  apiKey: "AIzaSyCmc3t-fyBaBACjf2wVR3LdPlypfMk1eBU",
+  authDomain: "safezone-os.firebaseapp.com",
+  projectId: "safezone-os",
+  storageBucket: "safezone-os.firebasestorage.app",
+  messagingSenderId: "890631820717",
+  appId: "1:890631820717:web:e7a3b5d5af8513f1de7d24"
+};
+firebase.initializeApp(firebaseConfig);
+const db = firebase.firestore();
+
+function getToken(){ var p = new URLSearchParams(window.location.search); return p.get('id') || ''; }
+function fmtValor(v){ return Number(v||0).toLocaleString('pt-BR',{minimumFractionDigits:2,maximumFractionDigits:2}); }
+function escHtml(s){ var d=document.createElement('div'); d.textContent=s||''; return d.innerHTML; }
+
+// Mesmo conteúdo fixo do Gerador de Propostas (GP_SERVICOS) e do rodapé de contato (gpFooterHtml).
+var SERVICOS_FIXOS = [
+  {nome:'Segurança', icone:'<path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="M9 12l2 2 4-4"/>'},
+  {nome:'Conectividade', icone:'<path d="M5 12.55a11 11 0 0 1 14.08 0"/><path d="M1.42 9a16 16 0 0 1 21.16 0"/><path d="M8.53 16.11a6 6 0 0 1 6.95 0"/><line x1="12" y1="20" x2="12.01" y2="20"/>'},
+  {nome:'Infraestrutura', icone:'<circle cx="6" cy="6" r="2"/><circle cx="18" cy="6" r="2"/><circle cx="12" cy="18" r="2"/><path d="M6 8v2a4 4 0 0 0 4 4"/><path d="M18 8v2a4 4 0 0 1-4 4"/>'},
+  {nome:'Automação', icone:'<path d="M3 9l9-7 9 7"/><path d="M9 22V12h6v10"/>'},
+  {nome:'Suporte', icone:'<path d="M3 18v-6a9 9 0 0 1 18 0v6"/><path d="M21 19a2 2 0 0 1-2 2h-1a2 2 0 0 1-2-2v-3a2 2 0 0 1 2-2h3zM3 19a2 2 0 0 0 2 2h1a2 2 0 0 0 2-2v-3a2 2 0 0 0-2-2H3z"/>'}
+];
+function servicosGridHtml(){
+  return '<div class="servicos-divisor"><div class="linha"></div><span>Nossos Serviços</span><div class="linha"></div></div>'+
+    '<div class="servicos-grid">'+SERVICOS_FIXOS.map(function(s){
+      return '<div class="servico-item"><div class="servico-icone"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#79B913" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">'+s.icone+'</svg></div><div class="servico-nome">'+s.nome+'</div></div>';
+    }).join('')+'</div>';
+}
+function footerHtml(){
+  var icPhone='<path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path>';
+  var icInsta='<rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line>';
+  var icMail='<path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline>';
+  var icPin='<path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle>';
+  function item(ic,txt){ return '<div class="gp-footer-item"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#79B913" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">'+ic+'</svg><span>'+txt+'</span></div>'; }
+  return '<div class="gp-footer-bar">'+item(icPhone,'(19) 99686-9707')+item(icInsta,'@safezone.equipamentos')+item(icMail,'safezone.equipamentos@gmail.com')+item(icPin,'Leme/SP')+'</div>';
+}
+
+// Monta a "casca" de uma página física (marca d'água + gráfico diagonal + logo), igual ao
+// gpMontarCascoPagina() do Gerador — cada página de verdade (Abertura, Serviço) usa essa casca.
+function montarPaginaHtml(conteudoInterno){
+  return '<div class="gp-page">'+
+    '<img class="gp-watermark" src="/imagens/marca-agua.png" alt="" onerror="this.style.display=\'none\'">'+
+    '<img class="gp-header-right" src="/imagens/topo-direito.png" alt="" onerror="this.style.display=\'none\'">'+
+    '<div class="gp-content">'+
+      '<div class="gp-header"><img class="gp-logo" src="/imagens/logo.png" alt="SafeZone Smart" onerror="this.style.display=\'none\'"></div>'+
+      conteudoInterno+
+    '</div>'+
+  '</div>';
+}
+
+var _token = getToken();
+
+function init(){
+  var el = document.getElementById('paginas');
+  if(!_token){ el.innerHTML = montarPaginaHtml('<h1>Link inválido</h1><div class="sub">Peça pra SafeZone reenviar o link da proposta.</div>'); return; }
+  db.collection('propostas_publicas').doc(_token).get().then(function(snap){
+    if(!snap.exists){ el.innerHTML = montarPaginaHtml('<h1>Proposta não encontrada</h1><div class="sub">O link pode ter expirado. Fale com a SafeZone.</div>'); return; }
+    renderProposta(snap.data());
+  }).catch(function(e){ el.innerHTML = montarPaginaHtml('<h1>Erro ao carregar</h1><div class="sub">'+escHtml(e.message)+'</div>'); });
+}
+
+// Página 1 — Abertura: eyebrow + título com nome do cliente + texto descritivo + grade de
+// serviços + rodapé. Fica SEPARADA da página de serviço, igual no documento real.
+function conteudoAberturaHtml(d){
+  if(!d.aberturaTitulo) return '';
+  return '<span class="eyebrow">Proposta comercial</span>'+
+    '<div class="capa-titulo">'+escHtml(d.aberturaTitulo)+'</div>'+
+    (d.aberturaTexto ? '<div class="capa-texto">'+escHtml(d.aberturaTexto).replace(/\n/g,'<br>')+'</div>' : '')+
+    servicosGridHtml()+
+    footerHtml();
+}
+
+// Página 2 — Serviço: título do serviço + tabela de itens + logo do fabricante + total +
+// condições de pagamento + observações + rodapé.
+function conteudoServicoHtml(d){
+  var itens = d.itens||[];
+  var linhasItens = itens.map(function(it){
+    return '<tr><td>'+escHtml(it.nome||'')+'</td><td class="num">'+(it.qtd||1)+'</td><td class="num">R$ '+fmtValor(it.unit)+'</td><td class="num">R$ '+fmtValor((it.qtd||1)*(it.unit||0))+'</td></tr>';
+  }).join('');
+  var linhaServico = d.valorServicos ? '<tr class="servico-row"><td colspan="3">Serviços Técnicos</td><td class="num">R$ '+fmtValor(d.valorServicos)+'</td></tr>' : '';
+  var tabela = (itens.length||d.valorServicos) ? (
+    '<table><thead><tr><th>Descrição</th><th class="num">Qtd</th><th class="num">Valor</th><th class="num">Total</th></tr></thead><tbody>'+linhasItens+linhaServico+'</tbody></table>'
+  ) : '';
+
+  var condBoxes = '';
+  if(d.vista || d.cartao || d.outro){
+    var pagItens = '';
+    if(d.vista) pagItens += '<div class="cond-item"><div class="cond-item-label">💵 À vista'+(d.vista.desconto?' (com desconto)':'')+'</div><div class="cond-item-val">R$ '+fmtValor(d.totalGeral*(1-(d.vista.desconto||0)/100))+'</div></div>';
+    if(d.cartao) pagItens += '<div class="cond-item"><div class="cond-item-label">💳 Cartão de Crédito (Visa e Master)</div><div class="cond-item-val">'+d.cartao.parcelas+'x de R$ '+fmtValor(d.totalGeral/d.cartao.parcelas)+'</div></div>';
+    if(d.outro && d.outro.label) pagItens += '<div class="cond-item"><div class="cond-item-label">'+escHtml(d.outro.label)+'</div>'+(d.outro.descricao?'<div class="cond-obs-texto">'+escHtml(d.outro.descricao)+'</div>':'')+'</div>';
+    condBoxes = '<div class="cond-grid">'+
+      '<div class="cond-box"><div class="cond-box-titulo">Formas de pagamento</div>'+pagItens+'</div>'+
+      '<div class="cond-box"><div class="cond-box-titulo">📄 Observações</div><div class="cond-obs-texto">'+(d.observacoes?escHtml(d.observacoes).replace(/\n/g,'<br>'):'—')+'</div></div>'+
+    '</div>';
+  }
+
+  return '<div class="servico-titulo">'+escHtml((d.servico||'PROPOSTA').toUpperCase())+'</div>'+
+    '<div class="sub">'+escHtml(d.cliente||'')+(d.marca?' · '+escHtml(d.marca):'')+'</div>'+
+    tabela +
+    (d.marcaLogo ? '<img class="fabricante-logo" src="'+escHtml(d.marcaLogo)+'" alt="'+escHtml(d.marca||'')+'">' : '') +
+    '<div class="total-bar"><span class="total-label">Valor total do investimento</span><span class="total-val">R$ '+fmtValor(d.totalGeral)+'</span></div>'+
+    condBoxes +
+    (d.obs ? '<div class="obs">'+escHtml(d.obs)+'</div>' : '') +
+    footerHtml();
+}
+
+function renderProposta(d){
+  var el = document.getElementById('paginas');
+  var html = '';
+  var conteudoAbertura = conteudoAberturaHtml(d);
+  if(conteudoAbertura) html += montarPaginaHtml(conteudoAbertura);
+  html += montarPaginaHtml(conteudoServicoHtml(d));
+  el.innerHTML = html;
+}
+
+init();
+</script>
+</body>
+</html>

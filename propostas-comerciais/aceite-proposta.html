@@ -27,6 +27,10 @@
   .eyebrow{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:2px;color:#9ca3af;display:block;margin-bottom:6px}
   .capa-titulo{font-size:24px;font-weight:900;color:#2D3748;letter-spacing:-.5px;text-transform:uppercase;margin-bottom:14px}
   .capa-texto{font-size:12px;color:#374151;line-height:1.65;text-align:justify;font-weight:300}
+  .abertura-imgs{margin-top:16px;display:grid;gap:8px}
+  .abertura-imgs.g1{grid-template-columns:1fr}
+  .abertura-imgs.g2{grid-template-columns:1fr 1fr}
+  .abertura-imgs img{width:100%;max-height:180px;object-fit:cover;border-radius:12px;box-shadow:0 6px 16px rgba(0,0,0,.15);display:block}
   .servico-titulo{font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:.5px;color:#6b7280;margin-bottom:2px}
   .sub{font-size:12px;color:#9ca3af;margin-bottom:16px}
   table{width:100%;border-collapse:collapse;margin-bottom:14px;font-size:11px}
@@ -158,11 +162,20 @@ function init(){
 
 // Página 1 — Abertura: eyebrow + título com nome do cliente + texto descritivo + grade de
 // serviços + rodapé. Fica SEPARADA da página de serviço/formulário, igual no documento real.
+function imagensAberturaHtml(slugs){
+  if(!slugs || !slugs.length) return '';
+  var classe = slugs.length===1 ? 'g1' : 'g2';
+  return '<div class="abertura-imgs '+classe+'">'+slugs.map(function(slug){
+    return '<img src="/imagens/servicos/'+slug+'.png" alt="" onerror="this.parentElement.removeChild(this)">';
+  }).join('')+'</div>';
+}
+
 function conteudoAberturaHtml(d){
   if(!d.aberturaTitulo) return '';
   return '<span class="eyebrow">Proposta comercial</span>'+
     '<div class="capa-titulo">'+escHtml(d.aberturaTitulo)+'</div>'+
     (d.aberturaTexto ? '<div class="capa-texto">'+escHtml(d.aberturaTexto).replace(/\n/g,'<br>')+'</div>' : '')+
+    imagensAberturaHtml(d.aberturaImagens)+
     servicosGridHtml()+
     footerHtml();
 }

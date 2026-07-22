@@ -26,13 +26,13 @@
   .gp-logo{height:32px;width:auto;object-fit:contain}
   .eyebrow{font-size:10.5px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:#9ca3af;display:block;margin-bottom:8px}
   .capa-titulo{font-size:21px;font-weight:900;color:#2D3748;letter-spacing:-.3px;text-transform:uppercase;margin-bottom:12px;line-height:1.25}
-  .capa-texto{font-size:14px;color:#374151;line-height:1.7;text-align:left;font-weight:400}
+  .capa-texto{font-size:14px;color:#374151;line-height:1.7;text-align:justify;font-weight:400}
   .abertura-imgs{margin-top:16px;display:grid;gap:8px;grid-template-columns:1fr}
   .abertura-imgs img{width:100%;max-height:170px;object-fit:cover;border-radius:12px;box-shadow:0 6px 16px rgba(0,0,0,.15);display:block}
   .servico-titulo{font-size:12px;font-weight:800;text-transform:uppercase;letter-spacing:.5px;color:#6b7280;margin-bottom:3px}
   .sub{font-size:13px;color:#9ca3af;margin-bottom:16px}
-  table{width:100%;border-collapse:collapse;margin-bottom:16px;font-size:12.5px}
-  thead th{background:#79B913;color:#fff;font-weight:700;text-align:left;padding:8px 6px;font-size:10.5px}
+  table{width:100%;border-collapse:collapse;margin-bottom:16px;font-size:11.5px}
+  thead th{background:#79B913;color:#fff;font-weight:700;text-align:left;padding:7px 6px;font-size:9.5px}
   thead th:first-child{border-radius:6px 0 0 6px}
   thead th:last-child{border-radius:0 6px 6px 0}
   th.num,td.num{text-align:right;white-space:nowrap}
@@ -49,8 +49,8 @@
   .cond-item:last-child{margin-bottom:0}
   .cond-item-label{font-size:13px;font-weight:600;color:#4b5563}
   .cond-item-val{font-size:15px;font-weight:800;color:#1f2937;margin-top:2px}
-  .cond-obs-texto{font-size:12.5px;color:#6b7280;line-height:1.65;text-align:left;white-space:pre-wrap}
-  .obs{font-size:12.5px;color:#6b7280;line-height:1.65;background:#f9fafb;border:1px solid #e5e7eb;border-radius:10px;padding:13px 14px;margin-bottom:16px;white-space:pre-wrap}
+  .cond-obs-texto{font-size:12.5px;color:#6b7280;line-height:1.65;text-align:justify;white-space:pre-wrap}
+  .obs{font-size:12.5px;color:#6b7280;line-height:1.65;background:#f9fafb;border:1px solid #e5e7eb;border-radius:10px;padding:13px 14px;margin-bottom:16px;white-space:pre-wrap;text-align:justify}
   .servicos-divisor{display:flex;align-items:center;gap:8px;margin:18px 0 12px}
   .servicos-divisor .linha{flex:1;height:1px;background:#e5e7eb}
   .servicos-divisor span{font-size:9.5px;font-weight:800;text-transform:uppercase;letter-spacing:.5px;color:#374151}
@@ -58,9 +58,14 @@
   .servico-item{padding:10px 6px;border:1px solid #f3f4f6;border-radius:10px;background:#fafafa;display:flex;align-items:center;gap:8px;text-align:left}
   .servico-icone{width:26px;height:26px;flex-shrink:0;border-radius:50%;background:#F0FDF4;display:flex;align-items:center;justify-content:center}
   .servico-nome{font-size:10.5px;font-weight:700;color:#374151;text-transform:uppercase;letter-spacing:.2px}
+  .servicos-grid .servico-item:last-child{grid-column:1/-1}
+  .nome-extra{display:inline}
   .gp-footer-bar{border-top:1px solid #e5e7eb;padding-top:12px;display:flex;flex-direction:column;gap:8px;font-size:11px;color:#4B5563;font-weight:600}
   .gp-footer-item{display:flex;align-items:center;gap:6px}
   h1{font-size:19px;color:#dc2626;font-weight:800}
+  .cta-prosseguir{display:block;text-align:center;background:#79B913;color:#fff;text-decoration:none;font-weight:800;font-size:14px;padding:15px;border-radius:10px;margin-bottom:16px}
+  .cta-prosseguir:active{opacity:.9}
+  .cta-sub{text-align:center;font-size:11px;color:#9ca3af;margin-top:-8px;margin-bottom:16px}
 
   /* ===== DESKTOP (telas ≥ 720px): layout mais denso, fiel ao PDF impresso ===== */
   @media (min-width:720px){
@@ -93,10 +98,14 @@
     .cond-obs-texto,.obs{font-size:11px;text-align:justify}
     .servicos-grid{grid-template-columns:repeat(5,1fr);gap:6px}
     .servico-item{flex-direction:column;text-align:center;padding:6px 3px}
+    .servico-item:last-child{grid-column:auto}
+    .nome-extra{display:none}
     .servico-icone{width:20px;height:20px;margin:0 auto 4px}
     .servico-nome{font-size:7px}
     .gp-footer-bar{flex-direction:row;justify-content:space-between;flex-wrap:wrap;font-size:9px}
     h1{font-size:18px}
+    .cta-prosseguir{font-size:13px;padding:12px}
+    .cta-sub{margin-top:-10px}
   }
 </style>
 </head>
@@ -130,13 +139,22 @@ var SERVICOS_FIXOS = [
   {nome:'Conectividade', icone:'<path d="M5 12.55a11 11 0 0 1 14.08 0"/><path d="M1.42 9a16 16 0 0 1 21.16 0"/><path d="M8.53 16.11a6 6 0 0 1 6.95 0"/><line x1="12" y1="20" x2="12.01" y2="20"/>'},
   {nome:'Infraestrutura', icone:'<circle cx="6" cy="6" r="2"/><circle cx="18" cy="6" r="2"/><circle cx="12" cy="18" r="2"/><path d="M6 8v2a4 4 0 0 0 4 4"/><path d="M18 8v2a4 4 0 0 1-4 4"/>'},
   {nome:'Automação', icone:'<path d="M3 9l9-7 9 7"/><path d="M9 22V12h6v10"/>'},
-  {nome:'Suporte', icone:'<path d="M3 18v-6a9 9 0 0 1 18 0v6"/><path d="M21 19a2 2 0 0 1-2 2h-1a2 2 0 0 1-2-2v-3a2 2 0 0 1 2-2h3zM3 19a2 2 0 0 0 2 2h1a2 2 0 0 0 2-2v-3a2 2 0 0 0-2-2H3z"/>'}
+  {nome:'Suporte<span class="nome-extra"> Especializado</span>', icone:'<path d="M3 18v-6a9 9 0 0 1 18 0v6"/><path d="M21 19a2 2 0 0 1-2 2h-1a2 2 0 0 1-2-2v-3a2 2 0 0 1 2-2h3zM3 19a2 2 0 0 0 2 2h1a2 2 0 0 0 2-2v-3a2 2 0 0 0-2-2H3z"/>'}
 ];
 function servicosGridHtml(){
   return '<div class="servicos-divisor"><div class="linha"></div><span>Nossos Serviços</span><div class="linha"></div></div>'+
     '<div class="servicos-grid">'+SERVICOS_FIXOS.map(function(s){
       return '<div class="servico-item"><div class="servico-icone"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#79B913" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">'+s.icone+'</svg></div><div class="servico-nome">'+s.nome+'</div></div>';
     }).join('')+'</div>';
+}
+// Botão de prosseguimento (CTA suave) — abre o WhatsApp da SafeZone com uma mensagem
+// pré-pronta sinalizando interesse. Não aceita nada sozinho: quem decide o próximo passo
+// continua sendo a equipe, na conversa. Fica ao final da página de serviço.
+function ctaProsseguirHtml(d){
+  var texto = 'Quero prosseguir com a proposta de '+(d.servico||'')+', vamos agendar a instalação?';
+  var url = 'https://wa.me/5519996869707?text='+encodeURIComponent(texto);
+  return '<a class="cta-prosseguir" href="'+url+'" target="_blank" rel="noopener">✅ Quero prosseguir e agendar a instalação</a>'+
+    '<div class="cta-sub">Você será direcionado ao WhatsApp da SafeZone Smart</div>';
 }
 function footerHtml(){
   var icPhone='<path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path>';
@@ -222,6 +240,7 @@ function conteudoServicoHtml(d){
     '<div class="total-bar"><span class="total-label">Valor total do investimento</span><span class="total-val">R$ '+fmtValor(d.totalGeral)+'</span></div>'+
     condBoxes +
     (d.obs ? '<div class="obs">'+escHtml(d.obs)+'</div>' : '') +
+    ctaProsseguirHtml(d) +
     footerHtml();
 }
 
